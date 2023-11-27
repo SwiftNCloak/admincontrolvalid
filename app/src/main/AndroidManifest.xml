@@ -13,14 +13,17 @@
         android:theme="@style/Theme.Admincontrolvalid"
         tools:targetApi="31">
         <activity
+            android:name=".UserDetailsActivity"
+            android:exported="true" />
+        <activity
             android:name=".GuestProfile"
             android:exported="true" />
         <activity
             android:name=".SignUpView"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".AdminView"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".SplashScreen"
             android:exported="true">

@@ -1,0 +1,58 @@
+<!-- res/layout/activity_user_details.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/detailsUsernameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username:" />
+
+    <TextView
+        android:id="@+id/detailsFullNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailsUsernameTextView"
+        android:text="Full Name:" />
+
+    <TextView
+        android:id="@+id/detailsEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailsFullNameTextView"
+        android:text="Email:" />
+
+    <TextView
+        android:id="@+id/detailsContactTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailsEmailTextView"
+        android:text="Contact:" />
+
+    <Button
+        android:id="@+id/approveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailsContactTextView"
+        android:layout_marginTop="16dp"
+        android:text="Approve" />
+
+    <Button
+        android:id="@+id/rejectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/approveButton"
+        android:layout_marginTop="8dp"
+        android:text="Reject" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rejectButton"
+        android:layout_marginTop="8dp"
+        android:text="Cancel" />
+
+</RelativeLayout>

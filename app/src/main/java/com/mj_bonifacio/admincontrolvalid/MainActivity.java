@@ -3,12 +3,13 @@ package com.mj_bonifacio.admincontrolvalid;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,11 +18,14 @@ public class MainActivity extends AppCompatActivity {
     Button loginBtn, signupBtn;
     EditText usernameTxt, passTxt;
     Intent loginInit, signupInit, adminInit;
+    SQLiteDB dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dbHelper = new SQLiteDB(this);
 
         // Assign based on IDs in the xml
         loginBtn = (Button) findViewById(R.id.btnLogin);
@@ -45,16 +49,16 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "ADMIN LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
                     adminInit = new Intent(MainActivity.this, AdminView.class);
                     startActivity(adminInit);
-                }
-
-                else if (!username.isEmpty() && !password.isEmpty()){
-                    Toast.makeText(MainActivity.this, "GUEST LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
-                    loginInit = new Intent(MainActivity.this, GuestProfile.class);
-                    startActivity(loginInit);
-                }
-
-                else {
-                    Toast.makeText(MainActivity.this, "Please enter username and password first before logging in.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Check if the user exists in the database and is accepted
+                    if (userExists(username, password) && dbHelper.isUserAccepted(username)) {
+                        Toast.makeText(MainActivity.this, "GUEST LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
+                        loginInit = new Intent(MainActivity.this, GuestProfile.class);
+                        loginInit.putExtra("USERNAME", username); // Pass the username to GuestProfile
+                        startActivity(loginInit);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Invalid username or password, or not yet accepted by admin.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -68,5 +72,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(signupInit);
             }
         });
+    }
+
+    // Validate if data exists
+    private boolean userExists(String username, String password){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {SQLiteDB.getColumnUser(), SQLiteDB.getColumnPass()};
+        String selection = SQLiteDB.getColumnUser() + "=? AND " + SQLiteDB.getColumnPass() + "=?";
+        String[] selectionArgs = {username, password};
+
+        Cursor cursor = db.query(SQLiteDB.getUsers(), columns, selection, selectionArgs, null, null, null);
+
+        boolean isValid = cursor.moveToFirst();
+
+        cursor.close();
+        db.close();
+
+        return isValid;
     }
 }
